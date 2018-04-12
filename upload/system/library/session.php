@@ -30,7 +30,8 @@ class Session {
 			} else {
 				$this->adaptor = new $class();
 			}	
-			
+
+			// 注册一个会在php中止时执行的函数
 			register_shutdown_function(array($this, 'close'));
 		} else {
 			trigger_error('Error: Could not load cache adaptor ' . $adaptor . ' session!');

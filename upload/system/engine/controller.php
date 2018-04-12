@@ -9,6 +9,7 @@
 
 /**
  * Controller class
+ * 所有控制器的基类
  *
  * @property Document document
  * @property Loader load
@@ -26,6 +27,7 @@ abstract class Controller {
 		$this->registry = $registry;
 	}
 
+    // __get(), __set()函数在获取/设置非类定义成员变量的时候，会由PHP自动调用。
 	public function __get($key) {
 		return $this->registry->get($key);
 	}

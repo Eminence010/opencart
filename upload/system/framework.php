@@ -5,7 +5,7 @@ $registry = new Registry();
 // Config
 $config = new Config();
 
-// Load the default config
+// 加载配置文件，将配置信息存储起来
 $config->load('default');
 $config->load($application_config);
 $registry->set('config', $config);
@@ -16,6 +16,7 @@ $registry->set('log', $log);
 
 date_default_timezone_set($config->get('date_timezone'));
 
+// 设置用户自定义的错误处理函数（出现错误，打印日志）
 set_error_handler(function($code, $message, $file, $line) use($log, $config) {
 	// error suppressed with @
 	if (error_reporting() === 0) {
@@ -133,7 +134,7 @@ if ($config->has('config_autoload')) {
 }
 
 // Language Autoload
-if ($config->has('language_autoload')) {
+if ($config->has('config_autoload')) {
 	foreach ($config->get('language_autoload') as $value) {
 		$loader->language($value);
 	}

@@ -7,13 +7,15 @@ if (version_compare(phpversion(), '5.5.0', '<') == true) {
 	exit('PHP5.5+ Required');
 }
 
+// 获取php.ini中 该配置的值。 null 的值则返回空字符串。如果配置选项不存在，将会返回 FALSE
 if (!ini_get('date.timezone')) {
-	date_default_timezone_set('UTC');
+	date_default_timezone_set('UTC');// 设定用于一个脚本中所有日期时间函数的默认时区
 }
 
 // Windows IIS Compatibility
-if (!isset($_SERVER['DOCUMENT_ROOT'])) {
-	if (isset($_SERVER['SCRIPT_FILENAME'])) {
+//  $_SERVER 超全局数组，存放服务器信息
+if (!isset($_SERVER['DOCUMENT_ROOT'])) {    // 当前运行脚本所在的文档根目录
+	if (isset($_SERVER['SCRIPT_FILENAME'])) {   // 当前执行脚本的绝对路径
 		$_SERVER['DOCUMENT_ROOT'] = str_replace('\\', '/', substr($_SERVER['SCRIPT_FILENAME'], 0, 0 - strlen($_SERVER['PHP_SELF'])));
 	}
 }
@@ -45,6 +47,7 @@ if ((isset($_SERVER['HTTPS']) && (($_SERVER['HTTPS'] == 'on') || ($_SERVER['HTTP
 	$_SERVER['HTTPS'] = false;
 }
 
+// 文件是否被覆盖了。覆盖了，返回覆盖的文件绝对路径。
 // Modification Override
 function modification($filename) {
 	if (defined('DIR_CATALOG')) {

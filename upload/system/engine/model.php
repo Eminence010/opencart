@@ -9,6 +9,7 @@
 
 /**
 * Model class
+* 所有model的基类
 */
 abstract class Model {
 	protected $registry;

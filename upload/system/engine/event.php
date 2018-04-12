@@ -47,6 +47,7 @@ class Event {
 			$sort_order[$key] = $value['priority'];
 		}
 
+		// SORT_ASC 按照上升顺序排序
 		array_multisort($sort_order, SORT_ASC, $this->data);	
 	}
 	

@@ -66,7 +66,7 @@ final class Loader {
 
 	/**
 	 *
-	 *
+	 * 控制器加载相应的模型
 	 * @param    string $route
 	 */
 	public function model($route) {

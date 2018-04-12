@@ -38,11 +38,14 @@ class Request {
 	public function clean($data) {
 		if (is_array($data)) {
 			foreach ($data as $key => $value) {
+			    // 释放给定的变量
 				unset($data[$key]);
 
 				$data[$this->clean($key)] = $this->clean($value);
 			}
 		} else {
+		    // 将特殊字符转换为 HTML 实体
+            // ENT_COMPAT   会转换双引号，不转换单引号
 			$data = htmlspecialchars($data, ENT_COMPAT, 'UTF-8');
 		}
 
