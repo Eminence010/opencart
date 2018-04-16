@@ -11,6 +11,7 @@ if (extension_loaded('mbstring')) {
 	}
 
 	function utf8_strrpos($string, $needle, $offset = 0) {
+	    // 查找字符串在一个字符串中最后出现的位置
 		return mb_strrpos($string, $needle, $offset);
 	}
 

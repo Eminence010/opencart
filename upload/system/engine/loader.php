@@ -71,23 +71,29 @@ final class Loader {
 	 */
 	public function model($route) {
 		// Sanitize the call
+        // 剔除一些非法字符
 		$route = preg_replace('/[^a-zA-Z0-9_\/]/', '', (string)$route);
 
+		// 如果还没有注册,则进入
 		if (!$this->registry->has('model_' . str_replace('/', '_', $route))) {
 			$file = DIR_APPLICATION . 'model/' . $route . '.php';
+            //注意PHP中，类名，方法名，函数名是不区分大小写的。
 			$class = 'Model' . preg_replace('/[^a-zA-Z0-9]/', '', $route);
 
 			if (is_file($file)) {
 				include_once($file);
 
-				$proxy = new Proxy();
+				$proxy = new Proxy();//实例化基础代理类
 
 				// Overriding models is a little harder so we have to use PHP's magic methods
 				// In future version we can use runkit
+                //循环类中的方法
 				foreach (get_class_methods($class) as $method) {
+                    //返回匿名函数作为代理类属性值
 					$proxy->{$method} = $this->callback($this->registry, $route . '/' . $method);
 				}
 
+                //注册代理对象，以便可以通过$this->model_catalog_category的形式访问代理对象
 				$this->registry->set('model_' . str_replace('/', '_', (string)$route), $proxy);
 			} else {
 				throw new \Exception('Error: Could not load model ' . $route . '!');
@@ -230,6 +236,7 @@ final class Loader {
 			$trigger = $route;
 
 			// Trigger the pre events
+            // 触发前缀事件，如果在配置文件中配置了'model'.$route.'/before'路径，通过该方法，可以改变$route的值，
 			$result = $registry->get('event')->trigger('model/' . $trigger . '/before', array(&$route, &$args));
 
 			if ($result && !$result instanceof Exception) {
@@ -237,6 +244,7 @@ final class Loader {
 			} else {
 				$class = 'Model' . preg_replace('/[^a-zA-Z0-9]/', '', substr($route, 0, strrpos($route, '/')));
 
+				// 存贮model对象
 				// Store the model object
 				$key = substr($route, 0, strrpos($route, '/'));
 
@@ -256,6 +264,7 @@ final class Loader {
 			}
 
 			// Trigger the post events
+            // 触发后缀事件(需要配置)
 			$result = $registry->get('event')->trigger('model/' . $trigger . '/after', array(&$route, &$args, &$output));
 
 			if ($result && !$result instanceof Exception) {
