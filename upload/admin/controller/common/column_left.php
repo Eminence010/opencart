@@ -16,6 +16,28 @@ class ControllerCommonColumnLeft extends Controller {
 				'children' => array()
 			);
 
+			// hfy
+            $hfy = array();
+            if ($this->user->hasPermission('access', 'hfy/markert')) {
+                $hfy[] = array(
+                    'name'	   => $this->language->get('text_markert'),
+                    'href'     => $this->url->link('hfy/markert', 'user_token=' . $this->session->data['user_token']),
+                    'children' => array()
+                );
+            }
+
+            if ($hfy) {
+                $data['menus'][] = array(
+                    'id'       => 'menu-catalog',
+                    'icon'	   => 'fa-tags',
+                    'name'	   => $this->language->get('text_hfy'),
+                    'href'     => '',
+                    'children' => $hfy
+                );
+            }
+
+            // hfy end
+
 			// Catalog
 			$catalog = array();
 
